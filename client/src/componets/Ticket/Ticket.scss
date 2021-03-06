@@ -1,0 +1,58 @@
+.tickets {
+  margin: 0;
+  padding: 0;
+
+  .ticket {
+    width: 100%;
+    flex-shrink: 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px 1px #e1e5e8;
+    margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #fff;
+    padding: 10px 20px;
+    transition: box-shadow 0.2s ease-in-out;
+    position: relative;
+
+    &:hover {
+      box-shadow: 0 2px 6px 1px #d3d7da;
+    }
+    button {
+      border-radius: 20px;
+      border-color: white;
+      outline: none;
+    }
+    .titleContainer {
+      display: flex;
+      text-align: center;
+      justify-content: space-between;
+    }
+    .title {
+      margin: 15px 0;
+      font-size: 16px;
+      font-weight: 400;
+      font-style: normal;
+    }
+
+    .content {
+      margin-top: auto;
+      margin-bottom: auto;
+      text-align: left;
+      font-size: 15px;
+      font-weight: 200;
+      font-style: normal;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+
+      .meta-data {
+        font-size: 12px;
+        margin: 10px 0;
+        flex-shrink: 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,13 @@
+0 silly argv {
+0 silly argv   _: [ 'run' ],
+0 silly argv   parallel: true,
+0 silly argv   lernaVersion: '3.22.1',
+0 silly argv   '$0': 'node_modules\\lerna\\cli.js',
+0 silly argv   script: 'start'
+0 silly argv }
+1 notice cli v3.22.1
+2 verbose rootPath C:\Users\shlio\Programming\Wix\entry-level-exam_4
+3 info ci enabled
+4 error JSONError: Unexpected token / in JSON at position 442 while parsing near '...": "^1.0.0"  },  ////CI=true  "scrip...' in client\package.json
+4 error     at module.exports (C:\Users\shlio\Programming\Wix\entry-level-exam_4\node_modules\parse-json\index.js:26:19)
+4 error     at parse (C:\Users\shlio\Programming\Wix\entry-level-exam_4\node_modules\load-json-file\index.js:15:9)

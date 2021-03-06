@@ -1,0 +1,20 @@
+.page-list {
+  padding: 2px;
+  background-color: #484a4d;
+  display: flex;
+  flex-wrap: wrap;
+}
+.page-button {
+  width: 20px;
+  height: 30px;
+  background-color: #484a4d;
+  color: white;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.page-button:hover {
+  background-color: #525357;
+}
