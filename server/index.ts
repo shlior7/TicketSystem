@@ -2,7 +2,7 @@ import express from 'express';
 import bodyParser = require('body-parser');
 import { tempData } from './temp-data';
 //const data = require('./try.json') ;
-import { serverAPIPort,APIClonePath, APIPath,APIDeletePath, DynamicUrl, APIChangePath } from '@fed-exam/config';
+import { serverAPIPort,API_Clone_Path, APIPath,API_Delete_Path, API_Change_Path,API_Pages_Amount_Path } from '@fed-exam/config';
 import { stat } from 'fs';
 const fs = require('fs');
 console.log('starting server', { serverAPIPort, APIPath });
@@ -22,8 +22,13 @@ app.use((_, res, next) => {
   next();
 });
 
-app.get(APIPath, (req, res) => {
+app.get(API_Pages_Amount_Path, (req, res) => {
+  res.send({
+    pages_amount:  Math.ceil(tempData.length/PAGE_SIZE),
+  });
+});
 
+app.get(APIPath, (req, res) => {
   // @ts-ignore
   const page: number = req.query.page || 1;
 
@@ -33,28 +38,30 @@ app.get(APIPath, (req, res) => {
 });
 
 
-app.put(APIChangePath, (req,res) => {
+app.put(API_Change_Path, (req,res) => {
   let index_of_ticket_to_change = tempData.findIndex(x => x.id === req.body.id_of_ticket);
   let new_title = req.body.new_title?.toString()?req.body.new_title?.toString():"";
   tempData[index_of_ticket_to_change].title = new_title;
-  res.sendStatus(200 );
+  res.sendStatus(200);
   // @ts-ignore
 });
 
-app.post(APIClonePath, (req,res) => {
+app.post(API_Clone_Path, (req,res) => {
   let ticket_index = tempData.findIndex(x => x.id === req.body.id);
   let new_ticket = req.body;
   new_ticket.id = makeId(req.body.id);
+  var date = new Date();
   tempData.splice(ticket_index + 1, 0 ,new_ticket);
   res.send(new_ticket);
+  res.send(tempData.length);
   // @ts-ignore
 });
 
 
-app.delete(APIDeletePath, (req,res) => {
+app.delete(API_Delete_Path, (req,res) => {
   let index_of_ticket_to_delete = tempData.findIndex(x => x.id === req.body.id);
   tempData.splice(index_of_ticket_to_delete,1);
-  res.sendStatus(200);
+  res.send(tempData.length);
   // @ts-ignore
 });
 

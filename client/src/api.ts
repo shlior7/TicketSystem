@@ -1,5 +1,6 @@
 import axios from 'axios';
-import {APIRootClonePath,APIRootPath, staticsPort,DynamicUrl, APIDeletePath, APIRootDeletePath, APIRootChangePath} from '@fed-exam/config';
+import {APIRootClonePath,APIRootPath, APIRootDeletePath, APIRootChangePath, APIRootPagesAmountPath} from '@fed-exam/config';
+
 
 export type Ticket = {
     id: string,
@@ -11,7 +12,8 @@ export type Ticket = {
 }
 
 export type ApiClient = {
-    getTickets: () => Promise<Ticket[]>;
+    getPagesAmount:()=>Promise<number>;
+    getTickets: (page_number:number) => Promise<Ticket[]>;
     cloneTicket: (ticket:Ticket) => boolean;
     changeTitle:  (id:string,title:string) => boolean;
     deleteTicket: (id:string) => boolean;
@@ -19,9 +21,12 @@ export type ApiClient = {
 
 export const createApiClient = (): ApiClient => {
     return {
-        
-        getTickets: () => {
-            return axios.get(APIRootPath).then((res) => res.data);
+        getPagesAmount: () => {
+            const promise = axios.get(APIRootPagesAmountPath).then((res) => res.data);
+            return promise.then(data=>data.pages_amount);
+        },
+        getTickets: (page_number:number) => {
+            return axios.get(APIRootPath,{params:{page:page_number}}).then((res) => res.data);
         },
         cloneTicket:(ticket:Ticket)=>{
             axios.post(APIRootClonePath, ticket)

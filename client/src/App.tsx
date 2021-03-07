@@ -1,16 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './App.scss';
 import { createApiClient, Ticket} from './api';
 import  ToggleSwitch  from "./componets/ToggleSwitch/switch"
 import { DropDown,DropDownItem } from './componets/Menu/DropDown';
 import  {PageNavigator}  from './componets/Page/page_button';
+import { TicketComponent } from './componets/Ticket/Ticket';
 
 
 export type AppState = {
 	tickets?: Ticket[],
 	theme:string,
 	search: string,
-	reload: boolean,
+	current_page:number,
+	pages_total:number,
+	reload: boolean
 }
 
 const api = createApiClient();
@@ -20,6 +23,8 @@ export class App extends React.PureComponent<{}, AppState> {
 	state: AppState = {
 		search: '',
 		theme:'light',
+		current_page:1,
+		pages_total:1,
 		reload:false
 	}
 	
@@ -38,18 +43,18 @@ export class App extends React.PureComponent<{}, AppState> {
 	searchDebounce: any = null;
 
 	async componentDidMount() {
-		this.setState({tickets: await api.getTickets()});
-		console.log(this.state.tickets);
+		this.setState({
+			tickets: await api.getTickets(this.state.current_page),
+			pages_total: await api.getPagesAmount()
+		});
 	}
 
-	async componentDidUpdate(prevState:AppState){
+	async componentDidUpdate(){
 		if(this.state.reload){
-			console.log(prevState.reload);
-			console.log(this.state.reload);
 			this.setState({
-				tickets: await api.getTickets()
+				tickets: await api.getTickets(this.state.current_page),
+				pages_total: await api.getPagesAmount()
 			});
-			console.log(this.state.tickets);
 		}
 		this.setState({
 			reload: false
@@ -61,13 +66,12 @@ export class App extends React.PureComponent<{}, AppState> {
 		if(enteredName){
 			ticket.title = enteredName;
 			api.changeTitle(ticket.id,enteredName);
-			this.setState({	search: this.state.search == ''?' ':''});
+			this.setState({	search: this.state.search === ''?' ':''});
 		}
 		return true;
 	}
 	cloneTicket = (ticket:Ticket)=> {
 		let confirmation = window.confirm("Are you sure you wish to Clone this item?")
-		console.log(confirmation);
 		if(confirmation){
 			let did_Clone = api.cloneTicket(ticket);
 			alert(did_Clone?"Cloned Successfully":"Error with Cloning");
@@ -118,8 +122,11 @@ export class App extends React.PureComponent<{}, AppState> {
 			});
 		}, 300);
 	}
-	gotoPage =(i:number)=>{
-		console.log("go to "+i);
+	gotoPage =(page_number:number)=>{
+		this.setState({
+			current_page:page_number,
+			reload:true
+		})
 	}
 	render() {	
 		const {tickets} = this.state;
@@ -132,7 +139,7 @@ export class App extends React.PureComponent<{}, AppState> {
 			</header>
 			{tickets ? <div className='results'>Showing {tickets.length} results</div> : null }	
 			{tickets ? this.renderTickets(tickets) : <h2>Loading..</h2>}
-			<PageNavigator number_of_pages = {5} ></PageNavigator>
+			<PageNavigator Change_Page={(page_number:number)=>this.gotoPage(page_number)} number_of_pages = {this.state.pages_total} ></PageNavigator>
 		</ div>)
 	}
 }

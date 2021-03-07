@@ -1,13 +1,13 @@
+:root {
+  --background: #404a00;
+}
+
 .page-list {
-  padding: 2px;
-  background-color: #484a4d;
   display: flex;
-  flex-wrap: wrap;
 }
 .page-button {
   width: 20px;
   height: 30px;
-  background-color: #484a4d;
   color: white;
   padding: 5px;
   display: flex;

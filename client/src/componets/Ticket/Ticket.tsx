@@ -1,5 +1,4 @@
-import React,{ Children, FunctionComponent} from 'react';
-import { DropDown, DropDownItem } from '../Menu/DropDown';
+import React,{ FunctionComponent} from 'react';
 import './Ticket.scss'
 
 export type Ticket = {
